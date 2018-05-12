@@ -451,4 +451,11 @@ int dsi_panel_get_thermal_hbm_disabled(struct dsi_panel *panel,
 				bool *thermal_hbm_disabled);
 
 
+int dsi_panel_cmd_set_transfer(struct dsi_panel *panel,
+			       struct dsi_panel_cmd_set *cmd);
+int dsi_panel_parse_dt_cmd_set(struct device_node *of_node,
+			       const char *cmd_str,
+			       const char *cmd_state_str,
+			       struct dsi_panel_cmd_set *cmd);
+
 #endif /* _DSI_PANEL_H_ */
