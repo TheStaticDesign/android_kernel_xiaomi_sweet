@@ -779,4 +779,11 @@ int dsi_display_cmd_engine_disable(struct dsi_display *display);
 int dsi_host_alloc_cmd_tx_buffer(struct dsi_display *display);
 
 
+/**
+ * dsi_display_set_idle_hint - gives hint to display whether display is idle
+ * @display: Pointer to private display handle
+ * @is_idle: true if display is idle, false otherwise
+ */
+void dsi_display_set_idle_hint(void *display, bool is_idle);
+
 #endif /* _DSI_DISPLAY_H_ */

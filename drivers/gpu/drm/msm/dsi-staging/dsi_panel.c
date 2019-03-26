@@ -26,6 +26,7 @@
 #include "dsi_ctrl_hw.h"
 #include "dsi_parser.h"
 #include "dsi_panel_mi.h"
+#include "sde_trace.h"
 
 
 #include <drm/drm_notifier.h>
@@ -6722,3 +6723,24 @@ ssize_t dsi_panel_mipi_reg_read(struct dsi_panel *panel, char *buf)
 	return count;
 }
 
+int dsi_panel_idle(struct dsi_panel *panel)
+{
+	if (unlikely(!panel))
+		return -EINVAL;
+
+	if (panel->funcs && panel->funcs->idle)
+		return panel->funcs->idle(panel);
+
+	return 0;
+}
+
+int dsi_panel_wakeup(struct dsi_panel *panel)
+{
+	if (unlikely(!panel))
+		return -EINVAL;
+
+	if (panel->funcs && panel->funcs->wakeup)
+		return panel->funcs->wakeup(panel);
+
+	return 0;
+}
