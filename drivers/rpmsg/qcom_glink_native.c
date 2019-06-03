@@ -2067,6 +2067,9 @@ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
 	}
 
 	glink->irq = irq;
+	ret = enable_irq_wake(glink->irq);
+	if (ret)
+		dev_err(dev, "failed to set irq wake\n");
 
 	ret = enable_irq_wake(irq);
 	if (ret < 0)
