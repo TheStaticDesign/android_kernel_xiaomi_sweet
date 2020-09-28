@@ -1,0 +1,13 @@
+kind: pipeline
+name: Sweet Drone
+
+steps:
+ - name: compile
+   image: starlight2834/ci_docker:latest
+   environment:
+     BOT_API_KEY:
+       from_secret: BOT_API_KEY
+   commands:
+      - apt-get -y update && apt-get -y upgrade && apt-get -y install git libxml2 default-jdk xz-utils python2 python3
+      - cd /drone/src
+      - bash kernel_setup.sh
