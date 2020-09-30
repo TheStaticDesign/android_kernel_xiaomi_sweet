@@ -2343,36 +2343,18 @@ int dsi_panel_alloc_cmd_packets(struct dsi_panel_cmd_set *cmd,
 }
 
 static int dsi_panel_parse_cmd_sets_sub(struct dsi_panel_cmd_set *cmd,
-					enum dsi_cmd_set_type type,
-					struct dsi_parser_utils *utils)
+					const char *data,
+					size_t length)
 {
 	int rc = 0;
-	u32 length = 0;
-	const char *data;
-	const char *state;
 	u32 packet_count = 0;
-
-	data = utils->get_property(utils->data, cmd_set_prop_map[type],
-			&length);
-	if (!data) {
-		pr_info("%s commands not defined\n", cmd_set_prop_map[type]);
-		rc = -ENOTSUPP;
-		goto error;
-	}
-
-	pr_info("type=%d, name=%s, length=%d\n", type,
-		cmd_set_prop_map[type], length);
-
-	print_hex_dump_debug("", DUMP_PREFIX_NONE,
-		       8, 1, data, length, false);
 
 	rc = dsi_panel_get_cmd_pkt_count(data, length, &packet_count);
 	if (rc) {
 		pr_err("commands failed, rc=%d\n", rc);
 		goto error;
 	}
-	pr_info("[%s] packet-count=%d, %d\n", cmd_set_prop_map[type],
-		packet_count, length);
+	pr_info("packet-count=%d, %d\n", packet_count, length);
 
 	rc = dsi_panel_alloc_cmd_packets(cmd, packet_count);
 	if (rc) {
@@ -2387,24 +2369,59 @@ static int dsi_panel_parse_cmd_sets_sub(struct dsi_panel_cmd_set *cmd,
 		goto error_free_mem;
 	}
 
-	state = utils->get_property(utils->data, cmd_set_state_map[type], NULL);
-	if (!state || !strcmp(state, "dsi_lp_mode")) {
-		cmd->state = DSI_CMD_SET_STATE_LP;
-	} else if (!strcmp(state, "dsi_hs_mode")) {
-		cmd->state = DSI_CMD_SET_STATE_HS;
-	} else {
-		pr_err("[%s] command state unrecognized-%s\n",
-		       cmd_set_state_map[type], state);
-		goto error_free_mem;
-	}
-
 	return rc;
 error_free_mem:
 	kfree(cmd->cmds);
 	cmd->cmds = NULL;
 error:
 	return rc;
+}
 
+static int dsi_panel_parse_cmd_sets_dt(struct dsi_panel_cmd_set *cmd,
+				       enum dsi_cmd_set_type type,
+				       struct dsi_parser_utils *utils)
+{
+	const char *data;
+	const char *state;
+	enum dsi_cmd_set_state st;
+	u32 length = 0;
+	int rc;
+
+	pr_debug("type=%d, name=%s, length=%d\n", type,
+		cmd_set_prop_map[type], length);
+
+	data = utils->get_property(utils->data, cmd_set_prop_map[type],
+			&length);
+	if (!data) {
+		pr_debug("%s commands not defined\n", cmd_set_prop_map[type]);
+		rc = -ENOTSUPP;
+		goto error;
+	}
+
+	pr_debug("type=%d, name=%s, length=%d\n", type,
+		cmd_set_prop_map[type], length);
+
+	print_hex_dump_debug("", DUMP_PREFIX_NONE,
+		       8, 1, data, length, false);
+
+	state = utils->get_property(utils->data, cmd_set_state_map[type], NULL);
+	if (!state || !strcmp(state, "dsi_lp_mode")) {
+		st = DSI_CMD_SET_STATE_LP;
+	} else if (!strcmp(state, "dsi_hs_mode")) {
+		st = DSI_CMD_SET_STATE_HS;
+	} else {
+		pr_err("[%s] command state unrecognized-%s\n",
+		       cmd_set_state_map[type], state);
+		return -ENOTSUPP;
+	}
+
+	rc = dsi_panel_parse_cmd_sets_sub(cmd, data, length);
+	if (rc)
+		return rc;
+
+	cmd->state = st;
+
+	return 0;
 }
 
 static int dsi_panel_parse_cmd_sets(
@@ -2432,7 +2449,7 @@ static int dsi_panel_parse_cmd_sets(
 					i, rc);
 			set->state = DSI_CMD_SET_STATE_LP;
 		} else {
-			rc = dsi_panel_parse_cmd_sets_sub(set, i, utils);
+			rc = dsi_panel_parse_cmd_sets_dt(set, i, utils);
 			if (rc)
 				pr_debug("failed to parse set %d\n", i);
 		}
@@ -3558,14 +3575,14 @@ int dsi_panel_parse_elvss_dimming_read_configs(struct dsi_panel *panel)
 	if (!elvss_dimming_cmds)
 		return -EINVAL;
 
-	dsi_panel_parse_cmd_sets_sub(&panel->elvss_dimming_offset,
+	dsi_panel_parse_cmd_sets_dt(&panel->elvss_dimming_offset,
 				DSI_CMD_SET_ELVSS_DIMMING_OFFSET, utils);
 	if (!panel->elvss_dimming_offset.count) {
 		pr_err("elvss dimming offset command parsing failed\n");
 		return -EINVAL;
 	}
 
-	dsi_panel_parse_cmd_sets_sub(&elvss_dimming_cmds->read_cmd,
+	dsi_panel_parse_cmd_sets_dt(&elvss_dimming_cmds->read_cmd,
 				DSI_CMD_SET_ELVSS_DIMMING_READ, utils);
 	if (!elvss_dimming_cmds->read_cmd.count) {
 		pr_err("elvss dimming command parsing failed\n");
@@ -3581,14 +3598,14 @@ int dsi_panel_parse_elvss_dimming_read_configs(struct dsi_panel *panel)
 
 	elvss_dimming_cmds->enabled = true;
 
-	dsi_panel_parse_cmd_sets_sub(&panel->hbm_fod_on,
+	dsi_panel_parse_cmd_sets_dt(&panel->hbm_fod_on,
 				DSI_CMD_SET_DISP_HBM_FOD_ON, utils);
 	if (!panel->hbm_fod_on.count) {
 		pr_err("hbm fod on command parsing failed\n");
 		return -EINVAL;
 	}
 
-	dsi_panel_parse_cmd_sets_sub(&panel->hbm_fod_off,
+	dsi_panel_parse_cmd_sets_dt(&panel->hbm_fod_off,
 				DSI_CMD_SET_DISP_HBM_FOD_OFF, utils);
 	if (!panel->hbm_fod_off.count) {
 		pr_err("hbm fod off command parsing failed\n");
@@ -3644,13 +3661,13 @@ int dsi_panel_parse_esd_reg_read_configs(struct dsi_panel *panel)
 	if (!esd_config)
 		return -EINVAL;
 
-	dsi_panel_parse_cmd_sets_sub(&esd_config->offset_cmd,
+	dsi_panel_parse_cmd_sets_dt(&esd_config->offset_cmd,
 				DSI_CMD_SET_PANEL_STATUS_OFFSET, utils);
 	if (!esd_config->offset_cmd.count) {
 		pr_err("no panel status offset command\n");
 	}
 
-	dsi_panel_parse_cmd_sets_sub(&esd_config->status_cmd,
+	dsi_panel_parse_cmd_sets_dt(&esd_config->status_cmd,
 				DSI_CMD_SET_PANEL_STATUS, utils);
 	if (!esd_config->status_cmd.count) {
 		pr_err("panel status command parsing failed\n");
