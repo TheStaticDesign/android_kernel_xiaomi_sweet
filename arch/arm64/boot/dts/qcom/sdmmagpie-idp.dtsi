@@ -361,6 +361,11 @@
 	qcom,hold-soc-while-full;
 	qcom,linearize-soc;
 	qcom,cl-feedback-on;
+
+	/* scale SSOC with chg term current >= 90% to avoid jumps */
+	qcom,tcss-enable;
+	/* scale SSOC with BSOC to mitigate jumps */
+	qcom,bass-enable;
 };
 
 &pm6150_charger {
