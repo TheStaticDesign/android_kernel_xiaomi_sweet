@@ -732,6 +732,7 @@ static int msm_drm_init(struct device *dev, struct drm_driver *drv)
 			goto fail;
 		}
 	}
+	irq_set_perf_affinity(cpu_perf_mask, platform_get_irq(pdev, 0));
 
 	ret = drm_dev_register(ddev, 0);
 	if (ret)
