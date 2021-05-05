@@ -618,6 +618,7 @@ config K6_CHARGE
 
 source "drivers/power/supply/qcom/Kconfig"
 source "drivers/power/supply/maxim/Kconfig"
+source "drivers/power/supply/maxim_k6/Kconfig"
 source "drivers/power/supply/ti/Kconfig"
 
 endif # POWER_SUPPLY
