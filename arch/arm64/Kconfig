@@ -1480,3 +1480,30 @@ source "arch/arm64/crypto/Kconfig"
 endif
 
 source "lib/Kconfig"
+
+menu "Xiaomi configuration options"
+
+config MATCH_XIAOMI
+        bool "Xiaomi board"
+        help
+          Support for Xiaomi boards.
+
+config MATCH_XIAOMI_SDMMAGPIE
+        bool "Xiaomi SDMMAGPIE boards"
+        select ARCH_QCOM
+        select ARCH_SDMMAGPIE
+        select MATCH_XIAOMI
+        help
+          Support for Sdmmagpie-based Xiaomi variants
+
+menu "Xiaomi board selection"
+
+config MATCH_XIAOMI_K6
+        bool "Xiaomi K6 board"
+        select MATCH_XIAOMI_SDMMAGPIE
+        help
+          Support for Redmi Note 10 Pro (Max), codename sweet.
+
+endmenu
+
+endmenu
