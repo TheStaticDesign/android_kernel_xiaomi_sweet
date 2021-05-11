@@ -59,7 +59,7 @@
 #define pr_debug pr_err
 #endif
 
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #ifdef pr_info
 #undef pr_info
 #define pr_info pr_err
@@ -869,7 +869,7 @@ static int cp_flash2_charge(unsigned int port)
 	if (pm_state.bq2597x.vbat_volt > sys_config.bat_volt_lp_lmt - 100 &&
 			pm_state.bq2597x.ibat_curr < sys_config.fc2_taper_current) {
 		if (fc2_taper_timer++ > TAPER_TIMEOUT) {
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 			fc2_taper_timer = 0;
 			pm_state.sw_near_cv = true;
 #else
@@ -1098,7 +1098,7 @@ void cp_statemachine(unsigned int port)
 
 	case CP_STATE_FLASH2_ENTRY_1:
 		cp_update_fc_status();
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 		if (pm_state.bq2597x.bus_error_status == VBUS_ERROR_LOW ||
 				pm_state.bq2597x.vbus_volt < pm_state.bq2597x.vbat_volt * 2 + 150) {
 			tune_vbus_retry = cp_get_qc_pulse_cnt();
@@ -1145,7 +1145,7 @@ void cp_statemachine(unsigned int port)
 		break;
 
 	case CP_STATE_FLASH2_ENTRY_3:
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 		if (pm_state.bq2597x.bus_error_status == VBUS_ERROR_HIGH) {
 			pr_err("vvbus=%d, too high to open cp switcher, decrease it.\n",
 					pm_state.bq2597x.vbus_volt);
@@ -1180,7 +1180,7 @@ void cp_statemachine(unsigned int port)
 				}
 			}
 
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 			if (pm_state.bq2597x.charge_enabled) {
 				cp_move_state(CP_STATE_FLASH2_TUNE);
 				cp_enable_sw(false);
@@ -1256,7 +1256,7 @@ static void cp_workfunc(struct work_struct *work)
 	}
 
 	if (pm_state.usb_type == POWER_SUPPLY_TYPE_USB_HVDCP_3) {
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 		schedule_delayed_work(&pm_state.qc3_pm_work, msecs_to_jiffies(300));
 #else
 		schedule_delayed_work(&pm_state.qc3_pm_work, HZ);
