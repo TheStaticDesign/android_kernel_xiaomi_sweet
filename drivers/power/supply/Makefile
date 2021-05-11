@@ -85,7 +85,7 @@ obj-$(CONFIG_AXP288_CHARGER)	+= axp288_charger.o
 obj-$(CONFIG_ARCH_QCOM)		+= qcom/
 obj-$(CONFIG_BQ2597X_CHARGE_PUMP)	+= ti/
 
-ifeq ($(CONFIG_K6_CHARGE),y)
+ifeq ($(CONFIG_MATCH_XIAOMI_K6),y)
 	obj-y += maxim_k6/
 else
 	obj-y += maxim/

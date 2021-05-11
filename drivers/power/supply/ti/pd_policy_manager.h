@@ -73,7 +73,7 @@ enum pm_state {
 #define NON_VERIFIED_PPS_FCC_MAX		3000
 #define MAX_THERMAL_LEVEL			13
 /* jeita related */
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #define JEITA_WARM_THR			480
 #define JEITA_COOL_THR			100
 #define JEITA_BYPASS_WARM_THR		480
@@ -104,7 +104,7 @@ enum pm_state {
 #define TAPER_WITH_IBUS_HYS			60
 #define TAPER_IBUS_THR			450
 
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #define BQ_TAPER_HYS_MV			10
 #else
 #define BQ_TAPER_HYS_MV			30
