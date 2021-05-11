@@ -132,7 +132,7 @@ enum print_reason {
 #define HIGH_NUM_PULSE_THR			12
 
 #define PD_UNVERIFED_CURRENT		4800000
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #define PD_UNVERIFED_VOLTAGE		4450000
 #else
 #define PD_UNVERIFED_VOLTAGE		4400000
@@ -194,7 +194,7 @@ enum print_reason {
 #define ROLE_REVERSAL_DELAY_MS		2000
 
 /* six pin new battery step charge micros */
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #define MAX_STEP_ENTRIES			3
 #define MAX_COUNT_OF_IBAT_STEP			2
 #else
@@ -215,7 +215,7 @@ enum print_reason {
 
 /* ffc related */
 #define NON_FFC_VFLOAT_VOTER			"NON_FFC_VFLOAT_VOTER"
-#ifdef CONFIG_K6_CHARGE
+#ifdef CONFIG_MATCH_XIAOMI_K6
 #define NON_FFC_VFLOAT_UV			4450000
 #else
 #define NON_FFC_VFLOAT_UV			4400000
