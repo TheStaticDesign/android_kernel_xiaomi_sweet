@@ -97,8 +97,10 @@ build_end() {
 	git clean -fd
 	mv "$KERNEL_IMG" "$AK_DIR"/zImage
 	mv "$KERNEL_DTBO" "$AK_DIR"
+	curl https://android.googlesource.com/platform/external/avb/+/refs/heads/master/avbtool.py?format=TEXT | base64 --decode > avbtool.py
+	python3 avbtool.py add_hash_footer --image dtbo.img --partition_size=33554432 --partition_name dtbo
 	ZIP_NAME=$KERNELNAME-$1-$COMMIT_SHA-$(date +%Y-%m-%d_%H%M)-UTC
-	zip -r9 "$ZIP_NAME".zip ./* -x .git README.md ./*placeholder
+	zip -r9 "$ZIP_NAME".zip ./* -x .git README.md ./*placeholder avbtool.py
 
 	# Sign zip if java is available
 	if command -v java > /dev/null 2>&1; then
