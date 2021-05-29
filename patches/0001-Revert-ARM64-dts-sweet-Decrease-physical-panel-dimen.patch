@@ -1,0 +1,31 @@
+From ffc5f02cf22d39fec014cb61dd08da1f3a1bf44d Mon Sep 17 00:00:00 2001
+From: CloudedQuartz <ravenklawasd@gmail.com>
+Date: Sat, 29 May 2021 22:48:59 +0530
+Subject: [PATCH] Revert "ARM64: dts: sweet: Decrease physical panel
+ dimensions"
+
+This reverts commit 67b03411fe4c43bfefcc56ce8a87622637c8fd8b.
+
+Signed-off-by: CloudedQuartz <ravenklawasd@gmail.com>
+---
+ .../boot/dts/qcom/dsi-panel-k6-38-0c-0a-fhd-dsc-video.dtsi    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/dsi-panel-k6-38-0c-0a-fhd-dsc-video.dtsi b/arch/arm64/boot/dts/qcom/dsi-panel-k6-38-0c-0a-fhd-dsc-video.dtsi
+index 3d0f1d519a79..c50034b24629 100644
+--- a/arch/arm64/boot/dts/qcom/dsi-panel-k6-38-0c-0a-fhd-dsc-video.dtsi
++++ b/arch/arm64/boot/dts/qcom/dsi-panel-k6-38-0c-0a-fhd-dsc-video.dtsi
+@@ -40,8 +40,8 @@
+ 		qcom,mdss-dsi-mdp-trigger = "none";
+ 		qcom,mdss-dsi-bl-dcs-type-ss-ea;
+ 		qcom,mdss-dsi-reset-sequence = <0 1>, <1 10>;
+-		qcom,mdss-pan-physical-width-dimension = <69>;
+-		qcom,mdss-pan-physical-height-dimension = <154>;
++		qcom,mdss-pan-physical-width-dimension = <695>;
++		qcom,mdss-pan-physical-height-dimension = <1546>;
+ 		qcom,mdss-dsi-tx-eot-append;
+ 		qcom,dispparam-enabled;
+ 		qcom,mdss-dsi-panel-hdr-enabled;
+-- 
+2.31.1
+
