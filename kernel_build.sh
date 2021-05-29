@@ -131,3 +131,13 @@ build_setup
 build_config $DEFCONFIG
 build_kernel
 build_end $DEVICE
+
+# Use stock panel dimentions for miui vendor based roms
+cd $KERNEL_DIR
+git am patches/0001-Revert-ARM64-dts-sweet-Decrease-physical-panel-dimen.patch
+
+# Build device 1 for MIUI
+build_setup
+build_config $DEFCONFIG
+build_kernel
+build_end ${DEVICE}_MIUI
