@@ -8,10 +8,10 @@
 
 # Config
 CURRENT_DIR="$(pwd)"
-KERNELNAME="perf"
+KERNELNAME="Delta"
 KERNEL_DIR="$CURRENT_DIR"
 AK_REPO="https://github.com/TheStaticDesign/AnyKernel3"
-AK_BRANCH="sweet-perf"
+AK_BRANCH="sweet"
 AK_DIR="$HOME/AnyKernel3"
 TC_DIR="$HOME/proton-clang"
 # End Config
