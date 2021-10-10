@@ -2248,7 +2248,7 @@ int drm_mode_atomic_ioctl(struct drm_device *dev,
 			(arg->flags & DRM_MODE_PAGE_FLIP_EVENT))
 		return -EINVAL;
 
-	if (!(arg->flags & DRM_MODE_ATOMIC_TEST_ONLY)) {
+	if (!(arg->flags & DRM_MODE_ATOMIC_TEST_ONLY) && df_boost_within_input(1024)) {
 		devfreq_boost_kick(DEVFREQ_CPU_LLCC_DDR_BW);
 		devfreq_boost_kick(DEVFREQ_CPU_CPU_LLC_BW);
 	}
