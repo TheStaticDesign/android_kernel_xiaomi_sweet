@@ -3040,7 +3040,6 @@ power_cycle:
 		mmc_power_cycle(host, ocr);
 	}
 
-err_command:
 	mmc_host_clk_release(host);
 
 	return err;
