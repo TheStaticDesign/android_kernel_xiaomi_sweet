@@ -2072,8 +2072,8 @@ static void _sde_crtc_blend_setup_mixer(struct drm_crtc *crtc,
 	stage_cfg = &sde_crtc->stage_cfg;
 	cstate = to_sde_crtc_state(crtc->state);
 
-	is_video_mode = sde_encoder_check_mode(sde_crtc->mixers[0].encoder,
-					       MSM_DISPLAY_CAP_VID_MODE);
+	is_video_mode = sde_encoder_check_curr_mode(sde_crtc->mixers[0].encoder,
+					       MSM_DISPLAY_VIDEO_MODE);
 	if (is_video_mode)
 		cstate->sbuf_prefill_line = _sde_crtc_calc_inline_prefill(crtc);
 	sde_crtc->sbuf_rot_id_old = sde_crtc->sbuf_rot_id;
