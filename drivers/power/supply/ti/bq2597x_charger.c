@@ -180,24 +180,10 @@ do {											\
 } while (0);
 
 #define bq_info(fmt, ...)								\
-do {											\
-	if (bq->mode == BQ25970_ROLE_MASTER)						\
-		printk(KERN_INFO "[bq2597x-MASTER]:%s:" fmt, __func__, ##__VA_ARGS__);	\
-	else if (bq->mode == BQ25970_ROLE_SLAVE)					\
-		printk(KERN_INFO "[bq2597x-SLAVE]:%s:" fmt, __func__, ##__VA_ARGS__);	\
-	else										\
-		printk(KERN_INFO "[bq2597x-STANDALONE]:%s:" fmt, __func__, ##__VA_ARGS__);\
-} while (0);
+do {} while (0);
 
 #define bq_dbg(fmt, ...)								\
-do {											\
-	if (bq->mode == BQ25970_ROLE_MASTER)						\
-		printk(KERN_DEBUG "[bq2597x-MASTER]:%s:" fmt, __func__, ##__VA_ARGS__);	\
-	else if (bq->mode == BQ25970_ROLE_SLAVE)					\
-		printk(KERN_DEBUG "[bq2597x-SLAVE]:%s:" fmt, __func__, ##__VA_ARGS__);	\
-	else										\
-		printk(KERN_DEBUG "[bq2597x-STANDALONE]:%s:" fmt, __func__, ##__VA_ARGS__);\
-} while (0);
+do {} while (0);
 
 enum hvdcp3_type {
 	HVDCP3_NONE = 0,
