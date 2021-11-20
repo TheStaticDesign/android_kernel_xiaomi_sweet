@@ -814,6 +814,9 @@ static ssize_t devkmsg_write(struct kiocb *iocb, struct iov_iter *from)
 #ifdef CONFIG_DEBUG_KERNEL
 			if (strstr(line, "healthd") ||
 				strstr(line, "cacert") ||
+				strncmp(line, "init:", strlen("init:")) ||
+				strncmp(line, "libprocessgroup", strlen("libprocessgroup")) ||
+				strncmp(line, "tas2563", strlen("tas2563")) ||
 				strncmp(line, "logd: Skipping", sizeof("logd: Skipping")))
 				return ret;
 #endif
