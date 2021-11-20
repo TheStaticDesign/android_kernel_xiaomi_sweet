@@ -813,14 +813,18 @@ static ssize_t devkmsg_write(struct kiocb *iocb, struct iov_iter *from)
 			endp++;
 			len -= endp - line;
 			line = endp;
+#ifdef CONFIG_DEBUG_KERNEL
 			if (strstr(line, "healthd") ||
 				strstr(line, "cacert"))
 				goto free;
+#endif
 		}
 	}
 
 	printk_emit(facility, level, NULL, 0, "%s", line);
+#ifdef CONFIG_DEBUG_KERNEL
 free:
+#endif
 	kfree(buf);
 	return ret;
 }
