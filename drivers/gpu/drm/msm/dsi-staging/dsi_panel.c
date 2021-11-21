@@ -44,7 +44,6 @@
 
 #include <linux/export.h>
 #include <linux/double_click.h>
-#include "xiaomi_frame_stat.h"
 
 #include "exposure_adjustment.h"
 
@@ -70,7 +69,6 @@
 #define to_dsi_display(x) container_of(x, struct dsi_display, host)
 static struct dsi_read_config g_dsi_read_cfg;
 
-extern struct frame_stat fm_stat;
 struct dsi_panel *g_panel;
 int panel_disp_param_send_lock(struct dsi_panel *panel, int param);
 int dsi_display_read_panel(struct dsi_panel *panel, struct dsi_read_config *read_config);
@@ -5376,12 +5374,6 @@ int panel_disp_param_send_lock(struct dsi_panel *panel, int param)
 		param = (param & 0x0FF00000);
 	}
 
-	/* set smart fps status */
-	if (param & 0xF0000000) {
-		fm_stat.enabled = param & 0x01;
-		pr_info("[LCD] smart dfps enable = [%d]\n", fm_stat.enabled);
-	}
-
 	temp = param & 0x0000000F;
 	switch (temp) {
 	case DISPPARAM_WARM:
@@ -6309,7 +6301,6 @@ int dsi_panel_enable(struct dsi_panel *panel)
 	panel->backlight_pulse_flag = false;
 	panel->backlight_demura_level = 0;
 	panel->skip_dimmingon = STATE_NONE;
-	idle_status = false;
 
 	mutex_unlock(&panel->panel_lock);
 	pr_info("[SDE] %s: DSI_CMD_SET_ON\n", __func__);

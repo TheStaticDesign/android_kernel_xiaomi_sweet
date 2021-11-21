@@ -416,10 +416,6 @@ static ssize_t dim_layer_enable_show(struct device *device,
 	return snprintf(buf, PAGE_SIZE, fod_dimlayer_enabled ? "enabled\n" : "disabled\n");
 }
 
-extern ssize_t smart_fps_value_show(struct device *device,
-			   struct device_attribute *attr,
-			   char *buf);
-
 static ssize_t dynamic_fps_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -505,7 +501,6 @@ static DEVICE_ATTR_RW(dim_layer_enable);
 static DEVICE_ATTR(dim_alpha, S_IRUGO|S_IWUSR, NULL, xm_fod_dim_layer_alpha_store);
 static DEVICE_ATTR_RW(doze_backlight);
 static DEVICE_ATTR_RO(fod_ui_ready);
-static DEVICE_ATTR_RO(smart_fps_value);
 static DEVICE_ATTR_RO(dynamic_fps);
 static DEVICE_ATTR_RW(mipi_reg);
 static DEVICE_ATTR_RO(wp_info);
@@ -523,7 +518,6 @@ static struct attribute *connector_dev_attrs[] = {
 	&dev_attr_doze_backlight.attr,
 	&dev_attr_dim_alpha.attr,
 	&dev_attr_fod_ui_ready.attr,
-	&dev_attr_smart_fps_value.attr,
 	&dev_attr_dynamic_fps.attr,
 	&dev_attr_mipi_reg.attr,
 	&dev_attr_thermal_hbm_disabled.attr,
