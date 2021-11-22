@@ -248,7 +248,6 @@ int dsi_display_set_backlight(struct drm_connector *connector,
 {
 	struct dsi_display *dsi_display = display;
 	struct dsi_panel *panel;
-	struct drm_device *drm_dev;
 	u32 bl_scale, bl_scale_ad;
 	u64 bl_temp;
 	int rc = 0;
@@ -257,7 +256,6 @@ int dsi_display_set_backlight(struct drm_connector *connector,
 		return -EINVAL;
 
 	panel = dsi_display->panel;
-	drm_dev = dsi_display->drm_dev;
 
 	mutex_lock(&panel->panel_lock);
 	if (!dsi_panel_initialized(panel)) {
