@@ -733,6 +733,31 @@ schedtune_boostgroup_init(struct schedtune *st)
 	return 0;
 }
 
+struct st_data {
+	char *name;
+	bool prefer_high_cap;
+};
+
+static void write_default_prefer_high_cap_values(struct cgroup_subsys_state *css) {
+	static struct st_data st_targets[] = {
+		{ "audio-app",		0 },
+		{ "background",		0 },
+		{ "foreground",		0 },
+		{ "rt",			0 },
+		{ "camera-daemon",	1 },
+		{ "top-app",		1 }
+	};
+
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(st_targets); i++) {
+		struct st_data tgt = st_targets[i];
+
+		if (!strcmp(css->cgroup->kn->name, tgt.name))
+			prefer_high_cap_write(css, NULL, tgt.prefer_high_cap);
+	}
+}
+
 static struct cgroup_subsys_state *
 schedtune_css_alloc(struct cgroup_subsys_state *parent_css)
 {
@@ -749,9 +774,11 @@ schedtune_css_alloc(struct cgroup_subsys_state *parent_css)
 	}
 
 	/* Allow only a limited number of boosting groups */
-	for (idx = 1; idx < BOOSTGROUPS_COUNT; ++idx)
+	for (idx = 1; idx < BOOSTGROUPS_COUNT; ++idx) {
 		if (!allocated_group[idx])
 			break;
+	write_default_prefer_high_cap_values(&allocated_group[idx]->css);
+	}
 	if (idx == BOOSTGROUPS_COUNT) {
 		pr_err("Trying to create more than %d SchedTune boosting groups\n",
 		       BOOSTGROUPS_COUNT);
